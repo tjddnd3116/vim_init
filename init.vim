@@ -7,6 +7,7 @@ filetype indent on
 
 set smartindent
 set cindent
+set	rnu
 set number
 set shiftwidth=4
 set tabstop=4
@@ -17,15 +18,13 @@ set clipboard=unnamedplus
 nmap <END> :nohl<CR>
 
 let mapleader = ","
-imap <leader>w <ESC>:w<CR>i
+imap <leader>ww <ESC>:w<CR>i
 imap <leader>wq <ESC>:wq<CR>
 
 autocmd FileType cpp set keywordprg=/Users/soum/.brew/bin/cppman
 
 call plug#begin('~/.vim/plugged')
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
-Plug 'seandewar/nvimesweeper'
-Plug 'alec-gibson/nvim-tetris'
 Plug 'gko/vim-coloresque'
 Plug 'IngoMeyer441/coc_current_word'
 Plug 'tpope/vim-fugitive'
@@ -49,7 +48,8 @@ Plug 'preservim/tagbar'
 Plug 'vim-airline/vim-airline'
 Plug 'Mofiqul/dracula.nvim'
 Plug 'Raimondi/delimitMate'
-Plug 'neoclide/coc.nvim' "", {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
+" Plug 'neoclide/coc.nvim' "", {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ntpeters/vim-better-whitespace'
 call plug#end()
@@ -248,11 +248,13 @@ EOF
 "----------------------------------coc-config---------------------------------"
 " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
 " unicode characters in the file autoload/float.vim
+nmap <leader>hh :CocCommand clangd.switchSourceHeader <CR>
+nmap <leader>sh :CocCommand clangd.switchSourceHeader vsplit <CR>
+
 set encoding=utf-8
 
 " TextEdit might fail if hidden is not set.
 set hidden
-
 " Some servers have issues with backup files, see #649.
 set nobackup
 set nowritebackup
