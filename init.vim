@@ -5,15 +5,16 @@ endif
 filetype on
 filetype indent on
 
+set encoding=UTF-8
 set smartindent
 set cindent
 set	rnu
 set number
 set shiftwidth=4
 set tabstop=4
-set hlsearch
 set nocompatible
 set clipboard=unnamedplus
+
 
 nmap <END> :nohl<CR>
 
@@ -24,6 +25,7 @@ imap <leader>wq <ESC>:wq<CR>
 autocmd FileType cpp set keywordprg=/Users/soum/.brew/bin/cppman
 
 call plug#begin('~/.vim/plugged')
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 Plug 'gko/vim-coloresque'
 Plug 'IngoMeyer441/coc_current_word'
@@ -52,6 +54,7 @@ Plug 'Raimondi/delimitMate'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ntpeters/vim-better-whitespace'
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 let g:hdr42user = 'soum'
@@ -70,7 +73,7 @@ let g:syntastic_cpp_compiler = 'c++'
 let g:syntastic_cpp_compiler_options = "-std=c++98 -Wall -Wextra -Werror -Wpedantic"
 let g:syntastic_c_compiler_options = "-std=c11 -Wall -Wextra -Werror -Wpedantic"
 
-" NERDtree
+"--------------------NERDtree------------------"
 nmap <F2> :NERDTreeToggle<CR>
 nmap <C-h> <C-w>h
 nmap <C-j> <C-w>j
@@ -80,15 +83,22 @@ let g:NERDTreeWinSize=20
 set wildignore+=*.o,*.obj,*.swp,*.DS_Store,tags*
 let NERDTreeRespectWildIgnore=1
 let NERDTreeShowBookmarks=1
+" Start NERDTree and leave the cursor in it.
+autocmd VimEnter * NERDTree | wincmd p
+"-----------------------------------------------"
 
+"----------------dracula-theme------------------"
 " neovim theme <dracula> 테마 적용
 " show the ‘~’ characters after the end of buffers
 colo dracula
 let g:dracula_show_end_of_buffer = 1
 " use transparent background
-let g:dracula_transparent_bg = 1
+" let g:dracula_transparent_bg = 1
 " set custom lualine background color
-let g:dracula_lualine_bg_color = "#44475a"
+hi CocFloating guibg=#3E4452
+hi CocMenuSel guibg=#3E44a0
+hi CocFloatDividingLine guibg=#3E4452
+"-----------------------------------------------"
 
 " delmitMate
 let delimitMate_expand_cr=1
@@ -129,8 +139,12 @@ ensure_installed = {"cpp", "c"}, -- one of "all", "maintained" (parsers with mai
 EOF
 
 "vim-airline
-" let g:airline_theme='dracula'
+let g:airline_theme = 'base16_dracula'
 let g:airline#extensions#gutentags#enabled = 1
+" adding to vim-airline's tabline
+let g:webdevicons_enable_airline_tabline = 1
+" adding to vim-airline's statusline
+let g:webdevicons_enable_airline_statusline = 1
 
 "vim-better-whitespace
 let g:better_whitespace_enabled=1
@@ -481,4 +495,15 @@ let g:floaterm_keymap_toggle = '<Leader>tt'
 
 "---------------coc_current_word-----------------"
 let g:coc_current_word_highlight_delay = 350
+"-------------------------------------------------"
+
+"------------------nerdtree-syntax-highlight----------"
+let s:git_orange = 'F54D27'
+let g:NERDTreeLimitedSyntax = 1
+let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExtensionHighlightColor['cpp'] = s:git_orange " sets the color of css files to blue
+let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExtensionHighlightColor['c'] = s:git_orange " sets the color of css files to blue
+let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
+let g:NERDTreeExtensionHighlightColor['Makefile'] = s:git_orange " sets the color of css files to blue
 "-------------------------------------------------"
