@@ -2,6 +2,10 @@ if has("syntax")
 	syntax on
 endif
 
+
+
+aaaa
+
 filetype on
 filetype indent on
 
