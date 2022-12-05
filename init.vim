@@ -4,8 +4,6 @@ endif
 
 
 
-aaaa
-
 filetype on
 filetype indent on
 
