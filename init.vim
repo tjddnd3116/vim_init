@@ -2,8 +2,6 @@ if has("syntax")
 	syntax on
 endif
 
-
-
 filetype on
 filetype indent on
 
@@ -27,6 +25,9 @@ imap <leader>wq <ESC>:wq<CR>
 autocmd FileType cpp set keywordprg=/Users/soum/.brew/bin/cppman
 
 call plug#begin('~/.vim/plugged')
+Plug 'jbyuki/instant.nvim'
+Plug 'jeffkreeftmeijer/vim-numbertoggle'
+Plug 'tiagovla/tokyodark.nvim'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 Plug 'gko/vim-coloresque'
@@ -43,7 +44,7 @@ Plug 'Pocco81/auto-save.nvim'
 Plug 'scrooloose/nerdcommenter'
 Plug 'gko/vim-coloresque'
 Plug 'leafOfTree/vim-matchtag'
-Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'pbondoer/vim-42header'
 Plug 'alexandregv/norminette-vim'
 Plug 'vim-syntastic/syntastic'
@@ -82,11 +83,24 @@ nmap <C-j> <C-w>j
 nmap <C-k> <C-w>k
 nmap <C-l> <C-w>l
 let g:NERDTreeWinSize=20
-set wildignore+=*.o,*.obj,*.swp,*.DS_Store,tags*
+set wildignore+=*.o,*.obj,*.swp,*.DS_Store,tags*,*.d
 let NERDTreeRespectWildIgnore=1
 let NERDTreeShowBookmarks=1
-" Start NERDTree and leave the cursor in it.
-autocmd VimEnter * NERDTree | wincmd p
+let NERDTreeMinimalUI = 0
+let NERDTreeDirArrows = 1
+let NERDTreeAutoDeleteBuffer = 1
+" Start NERDTree when Vim is started without file arguments.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+" Start NERDTree. If a file is specified, move the cursor to its window.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
+" Start NERDTree when Vim starts with a directory argument.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 "-----------------------------------------------"
 
 "----------------dracula-theme------------------"
@@ -95,12 +109,23 @@ autocmd VimEnter * NERDTree | wincmd p
 colo dracula
 let g:dracula_show_end_of_buffer = 1
 " use transparent background
-" let g:dracula_transparent_bg = 1
+let g:dracula_transparent_bg = 1
 " set custom lualine background color
 hi CocFloating guibg=#3E4452
 hi CocMenuSel guibg=#3E44a0
 hi CocFloatDividingLine guibg=#3E4452
 "-----------------------------------------------"
+
+"--------tokyodark theme ------------------"
+" let g:tokyodark_transparent_background = 0
+" let g:tokyodark_enable_italic_comment = 1
+" let g:tokyodark_enable_italic = 1
+" let g:tokyodark_color_gamma = "1.0"
+" colorscheme tokyodark
+"-----------------------------------------------"
+
+
+
 
 " delmitMate
 let delimitMate_expand_cr=1
@@ -337,6 +362,7 @@ nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
+nmap <silent> gs :vsplit<CR><Plug>(coc-definition)
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
@@ -406,6 +432,10 @@ if has('nvim-0.4.0') || has('patch-8.2.0750')
   vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
+
+hi CocCursorRange guibg=#b16287 guifg=#ebdbdd
+nmap <silent> <leader>mc <Plug>(coc-cursors-word)*
+xmap <silent> <leader>mc y/\V<C-r>=escape(@",'/\')<CR><CR>gN<Plug>(coc-cursors-range)gn
 
 " Use CTRL-S for selections ranges.
 " Requires 'textDocument/selectionRange' support of language server.
@@ -496,7 +526,7 @@ let g:floaterm_keymap_toggle = '<Leader>tt'
 "--------------------------------------------------
 
 "---------------coc_current_word-----------------"
-let g:coc_current_word_highlight_delay = 350
+let g:coc_current_word_highlight_delay = 450
 "-------------------------------------------------"
 
 "------------------nerdtree-syntax-highlight----------"
@@ -508,4 +538,8 @@ let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
 let g:NERDTreeExtensionHighlightColor['c'] = s:git_orange " sets the color of css files to blue
 let g:NERDTreeExtensionHighlightColor = {} " this line is needed to avoid error
 let g:NERDTreeExtensionHighlightColor['Makefile'] = s:git_orange " sets the color of css files to blue
+"-------------------------------------------------"
+
+"-------------------instant nvim ----------"
+let g:instant_username = "soum"
 "-------------------------------------------------"
