@@ -1,0 +1,18 @@
+CompileFlags:
+  Add: [-Wno-unknown-warning-option,
+        -Wall
+        ]
+  Remove: [--create=*,
+          --core=*,
+          --iso=*,
+          --integer-enumeration,
+          --fp-model=*,
+          --debug-info=*,
+          --align=*,
+          --default*,
+          --tradeoff=*,
+          --dep-file=*,
+          --language=*,
+          --optimize=*,
+          --no-default-libraries
+          ]
